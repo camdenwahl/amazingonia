@@ -46,7 +46,7 @@ function CartPage() {
                 )}
 
                 <button
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/homepage')}
                     className="mt-4 bg-[#307351] text-white px-4 py-2 rounded hover:bg-[#2a6244] transition"
                 >
                     Return to Homepage

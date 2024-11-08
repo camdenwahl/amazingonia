@@ -15,7 +15,7 @@ import ThankYouPage from './pages/ThankYouPage';
 
 const router = createBrowserRouter([
   {
-    path: "/first-prompt",
+    path: "/",
     element: <InitialPromptPage />
   },
   {
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     element: <ThankYouPage />
   },
   {
-    path: "/",
+    path: "/homepage",
     element: <Homepage />
   },
   {

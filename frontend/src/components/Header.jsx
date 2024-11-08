@@ -37,7 +37,7 @@ function Header({ onSearch }) {
             }`}
             style={{ position: 'fixed', top: 0, width: '100%', zIndex: 1000 }}
         >
-            <Link to="/" className="sm:text-2xl md:text-3xl m-2">ShopSearch</Link>
+            <Link to="/homepage" className="sm:text-2xl md:text-3xl m-2">ShopSearch</Link>
             <h2 className="m-2 hidden md:block">Deliver to You</h2>
             <div className="flex-grow mx-4">
                 <Searchbar onSearch={onSearch} />

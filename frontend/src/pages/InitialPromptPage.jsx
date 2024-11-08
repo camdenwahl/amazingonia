@@ -30,7 +30,7 @@ function InitialPromptPage() {
     setUserInfo({ age, gender, experience });
 
     // Randomly decide the order of designs
-    const designs = ['/', '/golden'];
+    const designs = ['/homepage', '/golden'];
     const shuffledDesigns = designs.sort(() => Math.random() - 0.5);
     setDesignOrder(shuffledDesigns);
 

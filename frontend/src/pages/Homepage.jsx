@@ -8,6 +8,7 @@ import { useCart } from '../CartContext';
 import { GlobalContext } from '../GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
+
 function Homepage() {
   const [products, setProducts] = useState([]);
   const [validProducts, setValidProducts] = useState([]);
@@ -109,7 +110,7 @@ function Homepage() {
   return (
     <>
       <Header onSearch={handleSearch} />
-      <div className="product-list flex flex-wrap mt-20 justify-center gap-4 p-4 md:px-8 lg:px-16 mt-8">
+      <div className="product-list flex flex-wrap mt-20 justify-center gap-4 p-4 md:px-8 lg:px-16">
         {currentProducts.map((product) => (
           <ProductCard
             key={product.Absolute_Url}
