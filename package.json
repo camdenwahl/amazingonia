@@ -1,0 +1,12 @@
+{
+  "name": "searchshop",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "heroku-postbuild": "npm install --prefix backend && npm run heroku-postbuild --prefix backend"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": "14.x"
+  }
+}
