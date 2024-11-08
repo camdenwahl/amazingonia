@@ -4,16 +4,23 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require("dotenv")
+const path = require('path');
+
 dotenv.config()
 
 // Create Express app
 const app = express();
-
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-// Replace with your MongoDB connection string
+
 const mongoURI = `mongodb+srv://${process.env.APP_NAME}:${process.env.APP_PASS}@cluster0.n7b0nqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/data_collection`;
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+  });
+
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -24,7 +31,7 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-// Define a schema for the data you want to store
+
 const DataSchema = new mongoose.Schema({
     userInfo: {
       age: Number,
