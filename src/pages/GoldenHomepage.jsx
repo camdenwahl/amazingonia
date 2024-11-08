@@ -1,14 +1,14 @@
-// src/pages/Homepage.jsx
+// src/pages/HomepageGolden.jsx
 import React, { useState, useEffect, useContext } from 'react';
-import Header from '../components/Header';
-import ProductCard from '../components/ProductCard';
+import Header from '../components/GoldenHeader';
+import ProductCardGolden from '../components/ProductCardGolden';
 import Papa from 'papaparse';
 import productsCSV from '../data/BigBasket.csv';
 import { useCart } from '../CartContext';
 import { GlobalContext } from '../GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
-function Homepage() {
+function HomepageGolden() {
   const [products, setProducts] = useState([]);
   const [validProducts, setValidProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,12 +45,6 @@ function Homepage() {
     });
   };
 
-  const handleImageLoadError = (url) => {
-    setValidProducts((prevProducts) =>
-      prevProducts.filter((product) => product.Absolute_Url !== url)
-    );
-  };
-
   const handleSearch = (query) => {
     const lowerCaseQuery = query.toLowerCase();
     const filtered = products.filter((product) =>
@@ -60,6 +54,12 @@ function Homepage() {
     setCurrentPage(1);
   };
 
+  const handleImageLoadError = (url) => {
+    setValidProducts((prevProducts) =>
+      prevProducts.filter((product) => product.Absolute_Url !== url)
+    );
+  };
+
   const getProductsForPage = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -67,6 +67,18 @@ function Homepage() {
   };
 
   const currentProducts = getProductsForPage();
+
+  // Function to split array into chunks of a specific size (3 items per container)
+  const chunkArray = (array, chunkSize = 3) => {
+    const results = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      results.push(array.slice(i, i + chunkSize));
+    }
+    return results;
+  };
+
+  // Create parent containers with exactly 3 items each
+  const parentContainers = chunkArray(currentProducts, 3);
 
   const nextPage = () => {
     if (currentPage < Math.ceil(validProducts.length / itemsPerPage)) {
@@ -81,17 +93,11 @@ function Homepage() {
   };
 
   useEffect(() => {
-    console.log('Cart contents:', cart);
-    console.log('Target Product:', targetProduct);
-  
-    // Use ProductName for comparison
+    // Check if the target product is in the cart
     const targetProductAdded = cart.some(
-      (item) => item.ProductName === targetProduct.productName
+      (item) => item.Absolute_Url === targetProduct.productUrl
     );
-    console.log('Is target product added:', targetProductAdded);
-  
     if (targetProductAdded && startTime) {
-      console.log('Navigating to next step...');
       const endTime = Date.now();
       if (!taskTimings.firstTaskTime) {
         setTaskTimings({ ...taskTimings, firstTaskTime: endTime - startTime });
@@ -103,36 +109,62 @@ function Homepage() {
         navigate('/after-survey');
       }
     }
-  }, [cart, targetProduct, startTime, taskTimings]);
-  
+  }, [cart]);
 
   return (
     <>
       <Header onSearch={handleSearch} />
-      <div className="product-list flex flex-wrap justify-center gap-4 p-4 md:px-8 lg:px-16 mt-8">
-        {currentProducts.map((product) => (
-          <ProductCard
-            key={product.Absolute_Url}
-            product={product}
-            onImageLoadError={handleImageLoadError}
-          />
+      <div className="product-list">
+        {parentContainers.map((containerProducts, index) => (
+          <div key={index} className="parent-container">
+            {containerProducts.length > 0 && (
+              <div className="golden-section-large">
+                <ProductCardGolden
+                  product={containerProducts[0]} // First card as the large rectangle
+                  onImageLoadError={handleImageLoadError}
+                />
+              </div>
+            )}
+            {containerProducts.length > 1 && (
+              <div className="golden-section-small">
+                <div className="second-card-container">
+                  <div className="half-height">
+                    <ProductCardGolden
+                      product={containerProducts[1]} // Second card
+                      onImageLoadError={handleImageLoadError}
+                    />
+                  </div>
+                </div>
+                {containerProducts.length > 2 && (
+                  <div className="third-card-container">
+                    <div className="quarter-height">
+                      <ProductCardGolden
+                        product={containerProducts[2]} // Third card
+                        onImageLoadError={handleImageLoadError}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         ))}
       </div>
-      <div className="pagination-controls flex justify-center items-center mt-8 space-x-4">
+      <div className="pagination-controls flex justify-center items-center mt-4">
         <button
-          className="px-6 py-2 bg-[#ffd814] text-black font-bold rounded-full shadow-md hover:bg-[#f7ca00] transition-all duration-300 disabled:bg-gray-300 disabled:cursor-not-allowed"
           onClick={prevPage}
           disabled={currentPage === 1}
+          className="mx-2 px-4 py-2 border rounded bg-gray-300 hover:bg-gray-400"
         >
           Previous
         </button>
-        <span className="text-gray-900 font-semibold">
+        <span className="mx-2">
           Page {currentPage} of {Math.ceil(validProducts.length / itemsPerPage)}
         </span>
         <button
-          className="px-6 py-2 bg-[#ffd814] text-black font-bold rounded-full shadow-md hover:bg-[#f7ca00] transition-all duration-300 disabled:bg-gray-300 disabled:cursor-not-allowed"
           onClick={nextPage}
           disabled={currentPage === Math.ceil(validProducts.length / itemsPerPage)}
+          className="mx-2 px-4 py-2 border rounded bg-gray-300 hover:bg-gray-400"
         >
           Next
         </button>
@@ -141,4 +173,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default HomepageGolden;
